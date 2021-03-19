@@ -13,13 +13,13 @@ import java.util.stream.Stream;
 public class DeveloperRestControllerV1 {
 
     private List<Developer> developers = Stream.of(
-            new Developer(1L,"Ivan","Ivanov"),
-            new Developer(2L,"Dim","Dimich"),
-            new Developer(3L,"Petr","Petrov")
+            new Developer(1L, "Ivan", "Ivanov"),
+            new Developer(2L, "Dim", "Dimich"),
+            new Developer(3L, "Petr", "Petrov")
     ).collect(Collectors.toList());
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Developer> getAll(){
+    public List<Developer> getAll() {
         return developers;
     }
 
