@@ -3,6 +3,8 @@ package ru.litvinov.springsecurity100500.myConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,6 +19,7 @@ import ru.litvinov.springsecurity100500.model.Role;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
 
@@ -27,12 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/**")
-                //.hasAuthority(Permission.DEVELOPERS_READ.getPermission())
-                .hasAnyRole(Role.USER.name(),Role.ADMIN.name())
-                .antMatchers(HttpMethod.POST,"/api/**")
-                //.hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())
-                .hasRole(Role.ADMIN.name())
                 .anyRequest().authenticated().and().httpBasic();
     }
 
@@ -43,14 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 User.builder()
                         .username("admin")
                         .password(passwordEncoder().encode("admin"))
-                        .roles(Role.ADMIN.name())
-                        //.authorities(Role.ADMIN.grantedAuthoritySet())
+                        .authorities(Role.ADMIN.grantedAuthoritySet())
                         .build(),
                 User.builder()
                         .username("user")
                         .password(passwordEncoder().encode("user"))
-                        .roles(Role.USER.name())
-                        //.authorities(Role.USER.grantedAuthoritySet())
+                        .authorities(Role.USER.grantedAuthoritySet())
                         .build()
         );
 
