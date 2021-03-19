@@ -1,5 +1,6 @@
 package ru.litvinov.springsecurity100500.rest;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.litvinov.springsecurity100500.model.Developer;
@@ -19,16 +20,19 @@ public class DeveloperRestControllerV1 {
     ).collect(Collectors.toList());
 
     @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('developers:read')")
     public List<Developer> getAll() {
         return developers;
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('developers:read')")
     public Developer getById(@PathVariable Long id) {
         return developers.stream().filter(developer -> developer.getId().equals(id)).findFirst().orElse(null);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('developers:write')")
     public Developer create(@RequestBody Developer developer) {
         System.out.println(developer);
         developers.add(developer);
