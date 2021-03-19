@@ -27,12 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/**")
-                //.hasAuthority(Permission.DEVELOPERS_READ.getPermission())
-                .hasAnyRole(Role.USER.name(),Role.ADMIN.name())
-                .antMatchers(HttpMethod.POST,"/api/**")
-                //.hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())
-                .hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET,"/api/**").hasAuthority(Permission.DEVELOPERS_READ.getPermission())
+                .antMatchers(HttpMethod.POST,"/api/**").hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())
                 .anyRequest().authenticated().and().httpBasic();
     }
 
@@ -44,13 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                         .username("admin")
                         .password(passwordEncoder().encode("admin"))
                         .roles(Role.ADMIN.name())
-                        //.authorities(Role.ADMIN.grantedAuthoritySet())
+                        .authorities(Role.ADMIN.grantedAuthoritySet())
                         .build(),
                 User.builder()
                         .username("user")
                         .password(passwordEncoder().encode("user"))
-                        .roles(Role.USER.name())
-                        //.authorities(Role.USER.grantedAuthoritySet())
+                        .authorities(Role.USER.grantedAuthoritySet())
                         .build()
         );
 
